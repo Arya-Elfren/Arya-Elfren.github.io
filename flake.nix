@@ -34,6 +34,9 @@
           };
         };
         defaultPackage = packages.document;
+        overlays.default = final: prev: {
+          blogpkgs = outputs.packages.default;
+        };
         devShell = pkgs.mkShell {
           nativeBuildInputs = devPkgs;
         };
