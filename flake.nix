@@ -35,7 +35,7 @@
         };
         defaultPackage = packages.document;
         overlays.default = final: prev: {
-          blogpkgs = outputs.packages.default;
+          blogpkgs = outputs.packages.${prev.system};
         };
         devShell = pkgs.mkShell {
           nativeBuildInputs = devPkgs;
