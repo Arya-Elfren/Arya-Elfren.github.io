@@ -14,7 +14,7 @@
         ];
       in rec {
         packages = {
-          document = pkgs.stdenvNoCC.mkDerivation rec {
+          site = pkgs.stdenvNoCC.mkDerivation rec {
             name = "Arya Elfren silva";
             src = self;
             buildInputs = with pkgs; [
@@ -35,7 +35,7 @@
         };
         defaultPackage = packages.document;
         overlays.default = final: prev: {
-          blogpkgs = outputs.packages.${prev.system};
+          aryaelfren-eu = outputs.packages.site;
         };
         devShell = pkgs.mkShell {
           nativeBuildInputs = devPkgs;
