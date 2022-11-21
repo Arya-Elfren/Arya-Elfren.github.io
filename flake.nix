@@ -1,7 +1,7 @@
 {
-  description = "Arya Elfren Website";
+  description = "Arya Elfren silva";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
   outputs = { self, nixpkgs, flake-utils }:
@@ -9,29 +9,34 @@
     eachSystem allSystems (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        tex =
-          pkgs.texlive.combine { inherit (pkgs.texlive) scheme-basic latexmk; };
+        devPkgs = with pkgs; [
+          git
+        ];
       in rec {
         packages = {
           document = pkgs.stdenvNoCC.mkDerivation rec {
-            name = "website-pdf";
+            name = "Arya Elfren silva";
             src = self;
-            buildInputs = [ pkgs.coreutils tex ];
+            buildInputs = with pkgs; [
+              coreutils
+              soupault
+              pandoc # .md support
+              git # `last edited` support
+            ];
             phases = [ "unpackPhase" "buildPhase" "installPhase" ];
             buildPhase = ''
-              export PATH="${pkgs.lib.makeBinPath buildInputs}";
-              mkdir -p .cache/texmf-var
-              env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-                latexmk -interaction=nonstopmode -pdf -lualatex \
-                AE.tex
+              soupault
             '';
             installPhase = ''
               mkdir -p $out
-              cp AE.pdf $out/
+              cp -r build/* $out/
             '';
           };
         };
         defaultPackage = packages.document;
+        devShell = pkgs.mkShell {
+          nativeBuildInputs = devPkgs;
+        };
       });
 }
 
