@@ -34,7 +34,7 @@
           };
         };
         defaultPackage = packages.document;
-        overlays.default = final: prev: {
+        overlays.${system} = final: prev: {
           aryaelfren-eu = outputs.packages.site;
         };
         devShell = pkgs.mkShell {
